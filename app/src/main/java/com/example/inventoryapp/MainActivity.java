@@ -3,14 +3,20 @@ package com.example.inventoryapp;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.inventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.inventoryapp.data.InventoryDbHelper;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
      * Database helper that will provide us access to the database
      */
     private InventoryDbHelper mDbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 InventoryEntry.COLUMN_PRODUCT_NAME,
                 InventoryEntry.COLUMN_PRODUCT_PRICE,
                 InventoryEntry.COLUMN_PRODUCT_QUANTITY,
-                InventoryEntry.COLUMN_PRODUCT_SUPPLIER};
+                InventoryEntry.COLUMN_PRODUCT_SUPPLIER,
+                InventoryEntry.COLUMN_PRODUCT_IMAGE};
 
         // Perform a query on the pets table
         Cursor cursor = db.query(
@@ -72,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
                 null);               // The sort order
 
         TextView displayView = findViewById(R.id.text_view_inventory);
+
+        ImageView imageView = findViewById(R.id.image_view);
 
         try {
             // Create a header in th TextView that looks like this:
@@ -92,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
             int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
             int supplierColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER);
+            int imageColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_IMAGE);
 
             // Iterate through all the returned rows in the cursor
             while (cursor.moveToNext()) {
@@ -102,6 +113,11 @@ public class MainActivity extends AppCompatActivity {
                 int currentPrice = cursor.getInt(priceColumnIndex);
                 int currentQuantity = cursor.getInt(quantityColumnIndex);
                 String currentSupplier = cursor.getString(supplierColumnIndex);
+                // Convert byte to bitmap
+                byte[] currentImage = cursor.getBlob(imageColumnIndex);
+                ByteArrayInputStream imageStream = new ByteArrayInputStream(currentImage);
+                Bitmap theImage = BitmapFactory.decodeStream(imageStream);
+
 
                 // Display the values from each column of the current row in the cursor
                 // in the TextView
@@ -110,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                         currentPrice + "-" +
                         currentQuantity + "-" +
                         currentSupplier);
+                imageView.setImageBitmap(theImage);
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -126,6 +143,13 @@ public class MainActivity extends AppCompatActivity {
         // Get the database in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
+        // Get image from drawable
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.delmonte_image);
+        // Convert Bitmap to byte
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte imageInByte[] = stream.toByteArray();
+
         // Create a ContentValues object where column names are the keys,
         // and product attributes are the values.
         ContentValues values = new ContentValues();
@@ -133,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, 10);
         values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, 200);
         values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER, "Jumia");
-        values.put(InventoryEntry.COLUMN_PRODUCT_IMAGE, R.drawable.delmonte_image);
+        values.put(InventoryEntry.COLUMN_PRODUCT_IMAGE, imageInByte);
 
         // Insert a new row for the product in the database, returning the ID for that new row.
         // The first argument for db.insert is the inventory table name.
@@ -143,5 +167,7 @@ public class MainActivity extends AppCompatActivity {
         // there are no values).
         // The third argument is the ContentValues object containing the info of the product.
         long newRowId = db.insert(InventoryEntry.TABLE_NAME, null, values);
+        // Close database connection
+        db.close();
     }
 }
