@@ -1,3 +1,16 @@
 <resources>
+    <!-- Name for the application [CHAR LIMIT=20] -->
     <string name="app_name">Inventory App</string>
+
+    <!-- Text hint for product field in the editor [CHAR LIMIT=30] -->
+    <string name="hint_product_name">Product</string>
+
+    <!-- Text hint for price field in the editor [CHAR LIMIT=10] -->
+    <string name="hint_product_price">Sales Price</string>
+
+    <!-- Text hint for quantity field in the editor [CHAR LIMIT=20] -->
+    <string name="hint_product_quantity">Quantity</string>
+
+    <!-- Text hint for supplier field in the editor [CHAR LIMIT=20] -->
+    <string name="hint_product_supplier">Supplier</string>
 </resources>

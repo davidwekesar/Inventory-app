@@ -1,10 +1,12 @@
 package com.example.inventoryapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +20,7 @@ import com.example.inventoryapp.data.InventoryDbHelper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
-public class MainActivity extends AppCompatActivity {
+public class CatalogActivity extends AppCompatActivity {
 
     /**
      * Database helper that will provide us access to the database
@@ -28,21 +30,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_catalog);
+
+        // Setup FloatingActionButton to open EditorActivity
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // To access our database, we instantiate our subclass of SQLiteOpenHelper
         // and pass the context, which is the current activity
         mDbHelper = new InventoryDbHelper(this);
-
-        Button btn = findViewById(R.id.insert_button);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                insertProduct();
-                displayDatabaseInfo();
-            }
-        });
     }
 
     @Override
@@ -79,60 +81,6 @@ public class MainActivity extends AppCompatActivity {
                 null,                 // Don't filter by row groups
                 null);               // The sort order
 
-        TextView displayView = findViewById(R.id.text_view_inventory);
-
-        ImageView imageView = findViewById(R.id.image_view);
-
-        try {
-            // Create a header in th TextView that looks like this:
-            //
-            // The inventory table contains <number of rows in Cursor> products.
-            //
-            //
-            displayView.setText("The inventory table contains " + cursor.getCount() + " products.\n\n");
-            displayView.append(InventoryEntry._ID + "-" +
-                    InventoryEntry.COLUMN_PRODUCT_NAME + "-" +
-                    InventoryEntry.COLUMN_PRODUCT_PRICE + "-" +
-                    InventoryEntry.COLUMN_PRODUCT_QUANTITY + "-" +
-                    InventoryEntry.COLUMN_PRODUCT_SUPPLIER + "\n");
-
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(InventoryEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
-            int supplierColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER);
-            int imageColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_IMAGE);
-
-            // Iterate through all the returned rows in the cursor
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on.
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                int currentPrice = cursor.getInt(priceColumnIndex);
-                int currentQuantity = cursor.getInt(quantityColumnIndex);
-                String currentSupplier = cursor.getString(supplierColumnIndex);
-                // Convert byte to bitmap
-                byte[] currentImage = cursor.getBlob(imageColumnIndex);
-                ByteArrayInputStream imageStream = new ByteArrayInputStream(currentImage);
-                Bitmap theImage = BitmapFactory.decodeStream(imageStream);
-
-
-                // Display the values from each column of the current row in the cursor
-                // in the TextView
-                displayView.append("\n" + currentID + "-" +
-                        currentName + "-" +
-                        currentPrice + "-" +
-                        currentQuantity + "-" +
-                        currentSupplier);
-                imageView.setImageBitmap(theImage);
-            }
-        } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid
-            cursor.close();
-        }
     }
 
     /**
