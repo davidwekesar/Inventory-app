@@ -2,6 +2,12 @@
     <!-- Name for the application [CHAR LIMIT=20] -->
     <string name="app_name">Inventory App</string>
 
+    <!-- Label for overflow menu option that inserts fake product data into the app [CHAR LIMIT=20] -->
+    <string name="action_insert_dummy_data">Insert Dummy Data</string>
+
+    <!-- Label for overflow menu option that deletes all product data in the app [CHAR LIMIT=20] -->
+    <string name="action_delete_all_entries">Delete All Products</string>
+
     <!-- Text hint for product field in the editor [CHAR LIMIT=30] -->
     <string name="hint_product_name">Product</string>
 
@@ -13,4 +19,11 @@
 
     <!-- Text hint for supplier field in the editor [CHAR LIMIT=20] -->
     <string name="hint_product_supplier">Supplier</string>
+
+    <!-- Text for the save button in the editor activity [CHAR LIMIT=10] -->
+    <string name="save_button_text">Save</string>
+
+    <string name="action_save">Save</string>
+
+    <string name="action_delete">Delete</string>
 </resources>
