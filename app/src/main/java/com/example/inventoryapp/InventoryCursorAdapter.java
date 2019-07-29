@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
+import com.example.inventoryapp.data.InventoryContract.InventoryEntry;
+
 /**
  * {@link InventoryCursorAdapter} is an adapter for a list or grid view
  * that uses a {@link Cursor} of inventory data as its data source. This adapter knows
@@ -42,9 +44,28 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        // Find individual views that we want to modify in the list item layout
         TextView nameTextView = view.findViewById(R.id.name_text_view);
         TextView priceTextView = view.findViewById(R.id.price_text_view);
         TextView quantityTextView = view.findViewById(R.id.quantity_text_view);
         TextView supplierTextView = view.findViewById(R.id.supplier_text_view);
+
+        // Find the column of pet attributes that we're interested in
+        int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
+        int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
+        int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
+        int supplierColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER);
+
+        // Read the product attributes from the Cursor for the current product
+        String productName = cursor.getString(nameColumnIndex);
+        int productPrice = cursor.getInt(priceColumnIndex);
+        int productQuantity = cursor.getInt(quantityColumnIndex);
+        String productSupplier = cursor.getString(supplierColumnIndex);
+
+        // Update the TextViews with the attributes for the current product
+        nameTextView.setText(productName);
+        priceTextView.setText(productPrice);
+        quantityTextView.setText(productQuantity);
+        supplierTextView.setText(productSupplier);
     }
 }
