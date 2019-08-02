@@ -2,13 +2,19 @@ package com.example.inventoryapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.inventoryapp.data.InventoryContract.InventoryEntry;
+
+import java.io.ByteArrayInputStream;
 
 /**
  * {@link InventoryCursorAdapter} is an adapter for a list or grid view
@@ -49,23 +55,30 @@ public class InventoryCursorAdapter extends CursorAdapter {
         TextView priceTextView = view.findViewById(R.id.price_text_view);
         TextView quantityTextView = view.findViewById(R.id.quantity_text_view);
         TextView supplierTextView = view.findViewById(R.id.supplier_text_view);
+        ImageView imageView = view.findViewById(R.id.image);
 
         // Find the column of pet attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
         int supplierColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER);
+        int imageColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_IMAGE);
 
         // Read the product attributes from the Cursor for the current product
         String productName = cursor.getString(nameColumnIndex);
         int productPrice = cursor.getInt(priceColumnIndex);
         int productQuantity = cursor.getInt(quantityColumnIndex);
         String productSupplier = cursor.getString(supplierColumnIndex);
+        byte[] productImage = cursor.getBlob(imageColumnIndex);
+        ByteArrayInputStream imageStream = new ByteArrayInputStream(productImage);
+        Bitmap image = BitmapFactory.decodeStream(imageStream);
 
         // Update the TextViews with the attributes for the current product
         nameTextView.setText(productName);
-        priceTextView.setText(productPrice);
-        quantityTextView.setText(productQuantity);
+        Log.v("InventoryCursorAdapter", "This is the product name: " + productName);
+        priceTextView.setText(String.valueOf(productPrice));
+        quantityTextView.setText(String.valueOf(productQuantity));
         supplierTextView.setText(productSupplier);
+        imageView.setImageBitmap(image);
     }
 }
