@@ -53,13 +53,13 @@ public class CatalogActivity extends AppCompatActivity implements
         // Find the ListView which will be populated with the product data
         ListView productListView = findViewById(R.id.list);
 
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_view);
+        productListView.setEmptyView(emptyView);
+
         // Setup an Adapter to create a list item for each row of product data in the Cursor.
         mCursorAdapter = new InventoryCursorAdapter(this, null);
         productListView.setAdapter(mCursorAdapter);
-
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity
-        mDbHelper = new InventoryDbHelper(this);
 
         // Kick off the loader
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);

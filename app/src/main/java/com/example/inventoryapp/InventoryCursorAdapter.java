@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +74,8 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
         // Update the TextViews with the attributes for the current product
         nameTextView.setText(productName);
-        Log.v("InventoryCursorAdapter", "This is the product name: " + productName);
-        priceTextView.setText(String.valueOf(productPrice));
+        priceTextView.setText(R.string.dollar_character);
+        priceTextView.append(String.valueOf(productPrice));
         quantityTextView.setText(String.valueOf(productQuantity));
         supplierTextView.setText(productSupplier);
         imageView.setImageBitmap(image);

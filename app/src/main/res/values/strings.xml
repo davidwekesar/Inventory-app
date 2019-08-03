@@ -23,7 +23,31 @@
     <!-- Text for the save button in the editor activity [CHAR LIMIT=10] -->
     <string name="save_button_text">Save</string>
 
+    <!-- Label for editor menu option to save pet and leave editor [CHAR LIMIT=20] -->
     <string name="action_save">Save</string>
 
+    <!-- Label for editor overflow menu option that deletes the current product [CHAR LIMIT=20] -->
     <string name="action_delete">Delete</string>
+
+    <!-- Text preceding the TextView for the product name in the CatalogActivity [CHAR LIMIT=20] -->
+    <string name="text_product_name">Product:</string>
+
+    <!-- Text preceding the TextView for the product price in the CatalogActivity [CHAR LIMIT=20] -->
+    <string name="text_product_price">Price:</string>
+
+    <!-- Text preceding the TextView for the product quantity in the CatalogActivity [CHAR LIMIT=20] -->
+    <string name="text_product_quantity">Quantity:</string>
+
+    <!-- Text preceding the TextView for the product supplier in the CatalogActivity [CHAR LIMIT=20] -->
+    <string name="text_product_supplier">Supplier:</string>
+
+    <!-- Text appended with the product price in the InventoryCursorAdapter class before its
+    displayed in the activity_catalog.xml [CHAR LIMIT=20] -->
+    <string name="dollar_character">$</string>
+
+    <!-- Title text for the empty view [CHAR LIMIT=50] -->
+    <string name="empty_view_text">Get started by adding a product.</string>
+
+    <!-- Subtitle text for the empty view which prompts the user to add a product [CHAR LIMIT=50] -->
+    <string name="empty_view_title_text">It\'s a bit lonely here...</string>
 </resources>
