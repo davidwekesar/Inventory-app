@@ -25,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -189,6 +188,7 @@ public class EditorActivity extends AppCompatActivity implements
                 InputStream inputStream = getContentResolver().openInputStream(uri);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                 mImageView.setImageBitmap(bitmap);
+                mAddImageIcon.setVisibility(View.GONE);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
