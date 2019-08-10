@@ -89,7 +89,7 @@ public class CatalogActivity extends AppCompatActivity implements
      */
     private void insertProduct() {
         // Get image from drawable
-        Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.delmonte_image);
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.lawn_mower);
         // Convert Bitmap to byte
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -98,10 +98,10 @@ public class CatalogActivity extends AppCompatActivity implements
         // Create a ContentValues object where column names are the keys,
         // and product attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Delmonte");
-        values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, 10);
-        values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, 200);
-        values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER, "Jumia");
+        values.put(InventoryEntry.COLUMN_PRODUCT_NAME, "Lawn mower");
+        values.put(InventoryEntry.COLUMN_PRODUCT_PRICE, 299);
+        values.put(InventoryEntry.COLUMN_PRODUCT_QUANTITY, 12);
+        values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER, "Lawn Mower Co");
         values.put(InventoryEntry.COLUMN_PRODUCT_IMAGE, imageInByte);
 
         Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
@@ -138,6 +138,8 @@ public class CatalogActivity extends AppCompatActivity implements
                 InventoryEntry._ID,
                 InventoryEntry.COLUMN_PRODUCT_NAME,
                 InventoryEntry.COLUMN_PRODUCT_PRICE,
+                InventoryEntry.COLUMN_PRODUCT_SUPPLIER,
+                InventoryEntry.COLUMN_PRODUCT_QUANTITY,
                 InventoryEntry.COLUMN_PRODUCT_IMAGE};
 
         // This loader will execute the ContentProvider's query method on a background thread

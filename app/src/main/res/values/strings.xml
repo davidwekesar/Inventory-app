@@ -99,6 +99,11 @@
     displayed in the activity_catalog.xml [CHAR LIMIT=20] -->
     <string name="dollar_character">$</string>
 
+    <!-- Text for the supplier TextView appended with the supplier's name -->
+    <string name="by">by\u0020</string>
+
+    <string name="in_stock">In Stock:\u0020</string>
+
     <!-- Title text for the empty view [CHAR LIMIT=50] -->
     <string name="empty_view_text">Get started by adding a product.</string>
 
