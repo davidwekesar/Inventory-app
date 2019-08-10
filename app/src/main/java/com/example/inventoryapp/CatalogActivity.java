@@ -1,6 +1,7 @@
 package com.example.inventoryapp;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -15,10 +16,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.inventoryapp.data.InventoryContract.InventoryEntry;
-import com.example.inventoryapp.data.InventoryDbHelper;
 
 import java.io.ByteArrayOutputStream;
 
@@ -26,11 +27,6 @@ public class CatalogActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int INVENTORY_LOADER = 0;
-
-    /**
-     * Database helper that will provide us access to the database
-     */
-    private InventoryDbHelper mDbHelper;
 
     InventoryCursorAdapter mCursorAdapter;
 
@@ -60,6 +56,28 @@ public class CatalogActivity extends AppCompatActivity implements
         // Setup an Adapter to create a list item for each row of product data in the Cursor.
         mCursorAdapter = new InventoryCursorAdapter(this, null);
         productListView.setAdapter(mCursorAdapter);
+
+        // Setup the item click listener
+        productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // Create new intent to go to {@link EditorActivity}
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+
+                // Form the content URI that represents the specific product that was clicked on,
+                // by appending the "id" (passed as input to this method) on to the
+                // {@link InventoryEntry#CONTENT_URI}.
+                // For example, the URI would be "content://com.example.inventoryapp.inventory
+                // /inventory/3" if the pet with id 3 was clicked on.
+                Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
+
+                // Set the URI on the data field of the intent
+                intent.setData(currentProductUri);
+
+                // Launch the {@link EditorActivity} to display the data for the current pet.
+                startActivity(intent);
+            }
+        });
 
         // Kick off the loader
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
@@ -120,8 +138,6 @@ public class CatalogActivity extends AppCompatActivity implements
                 InventoryEntry._ID,
                 InventoryEntry.COLUMN_PRODUCT_NAME,
                 InventoryEntry.COLUMN_PRODUCT_PRICE,
-                InventoryEntry.COLUMN_PRODUCT_QUANTITY,
-                InventoryEntry.COLUMN_PRODUCT_SUPPLIER,
                 InventoryEntry.COLUMN_PRODUCT_IMAGE};
 
         // This loader will execute the ContentProvider's query method on a background thread

@@ -52,22 +52,16 @@ public class InventoryCursorAdapter extends CursorAdapter {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = view.findViewById(R.id.name_text_view);
         TextView priceTextView = view.findViewById(R.id.price_text_view);
-        TextView quantityTextView = view.findViewById(R.id.quantity_text_view);
-        TextView supplierTextView = view.findViewById(R.id.supplier_text_view);
         ImageView imageView = view.findViewById(R.id.image);
 
         // Find the column of pet attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE);
-        int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
-        int supplierColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER);
         int imageColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_IMAGE);
 
         // Read the product attributes from the Cursor for the current product
         String productName = cursor.getString(nameColumnIndex);
         int productPrice = cursor.getInt(priceColumnIndex);
-        int productQuantity = cursor.getInt(quantityColumnIndex);
-        String productSupplier = cursor.getString(supplierColumnIndex);
         byte[] productImage = cursor.getBlob(imageColumnIndex);
         ByteArrayInputStream imageStream = new ByteArrayInputStream(productImage);
         Bitmap image = BitmapFactory.decodeStream(imageStream);
@@ -76,8 +70,6 @@ public class InventoryCursorAdapter extends CursorAdapter {
         nameTextView.setText(productName);
         priceTextView.setText(R.string.dollar_character);
         priceTextView.append(String.valueOf(productPrice));
-        quantityTextView.setText(String.valueOf(productQuantity));
-        supplierTextView.setText(productSupplier);
         imageView.setImageBitmap(image);
     }
 }
